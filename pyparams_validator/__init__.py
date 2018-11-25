@@ -1,4 +1,4 @@
-VERSION = [1, 0, 0, "beta", 2]
+VERSION = [1, 0, 0, "beta", 3]
 
 
 def get_version():
@@ -184,7 +184,7 @@ class __types_wrapper__ (object):
         differ_data = set (compare_data).difference (set (data))
         input_fields = set ([x for x in list (set (data).intersection (set (self.data))) if data[x] != None])
         for item in list (input_fields):
-            if type (data[item]) != self.data[item].data_type:
+            if not isinstance(data[item],dict) and type (data[item]) != self.data[item].data_type:
                 raise exceptions.InvalidDataFields (item, type (data[item]), self.data[item].data_type)
             if self.data[item].data_type == dict:
                 self.data[item].validate_data_type (data[item], item)
