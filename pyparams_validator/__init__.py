@@ -1,4 +1,4 @@
-VERSION = [1, 0, 0, "beta", 4]
+VERSION = [1, 0, 0, "beta", 5]
 
 
 def get_version():
@@ -239,8 +239,10 @@ class __types_wrapper__ (object):
             data = kwargs
             if args.__len__ () > 0:
                 data = args[0]
-
-            _data_ = dmobj.pobject(data)
+            if isinstance(data,dict):
+                _data_ = dmobj.pobject(data)
+            else:
+                _data_ = data
             return self.__caller__ (_data_)
         return self.__caller__ (*args, **kwargs)
 
