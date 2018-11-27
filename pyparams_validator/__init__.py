@@ -125,7 +125,9 @@ class __field_info__ ():
         check_fields = set (self.detail).intersection (set (data))
         for item in list (check_fields):
             if data[item] != None:
-                if self.detail[item].data_type != type (data[item]):
+                if (self.detail[item].data_type in [str,unicode] and type (data[item]) in [str,unicode]):
+                    return
+                elif self.detail[item].data_type != type (data[item]):
                     if parent_name != None:
                         raise exceptions.InvalidDataFields (parent_name + "." + item, type (data[item]),
                                                             self.detail[item].data_type)
@@ -226,7 +228,8 @@ class __types_wrapper__ (object):
                         raise exceptions.InvalidDataFields(ret_fields[0],ex.receive_data_type,ex.expected_data_type,index,_item,item)
 
 
-
+            elif self.data[item].data_type in [str,unicode] and type (data[item]) in [str,unicode]:
+                return
             elif self.data[item].data_type!=object and not isinstance(data[item],dict) and type (data[item]) != self.data[item].data_type:
                 raise exceptions.InvalidDataFields (item, type (data[item]), self.data[item].data_type)
             if self.data[item].data_type == dict:
