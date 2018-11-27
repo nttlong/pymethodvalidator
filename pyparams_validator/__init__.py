@@ -178,6 +178,8 @@ class __types_wrapper__ (object):
         self.input_params = None
 
     def validate(self, *args, **kwargs):
+        set1 = None
+        set2 = None
         data = kwargs
         if args.__len__ () > 0:
             data = args[0]
@@ -185,15 +187,27 @@ class __types_wrapper__ (object):
         cmp_inter_data = __GOBBLE__.clone_data (self.data)
         require_fields = require_fields = set ([x for x, y in self.data.items () if y.is_require == True])
         object_fields = set ([x for x, y in self.data.items () if y.detail != None])
-        missing_fields = require_fields.difference (set (data))
+        set1 = set(data)
+        missing_fields = require_fields.difference(set1)
         if missing_fields != set ([]):
             raise exceptions.MissingFields (missing_fields)
-        input_object_fields = set (data).difference (require_fields).intersection (object_fields)
+        set1 = set(data)
+        input_object_fields = set1.difference (require_fields).intersection (object_fields)
         for item in list (input_object_fields):
             self.data[item].validate (data[item], item)
         compare_data.update (data)
-        differ_data = set (compare_data).difference (set (data))
-        input_fields = set ([x for x in list (set (data).intersection (set (self.data))) if data[x] != None])
+        # set1 = set (list(compare_data))
+        # set2 = set (data)
+        differ_data =set.difference(set(
+            [k for k,v in  compare_data.items()]
+        ),set(
+            [k for k,v in data.items()]
+        ))
+        input_fields = set ([x for x in list (set (
+            [k for k,v in data.items()]
+        ).intersection (set(
+            [k for k,v in  self.data.items()]
+        ))) if data[x]])
         for item in list (input_fields):
             index = 0
             if isinstance(data[item],list):
