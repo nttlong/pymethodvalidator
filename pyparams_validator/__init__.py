@@ -11,8 +11,6 @@ def get_version():
 
 from . import exceptions
 from . import dmobj
-
-
 class __GOBBLE__ ():
     @staticmethod
     def consume_data(data, parent):
